@@ -68,6 +68,10 @@ namespace LogGetter
             }
             loggerFactory.AddLog4Net();
 
+            app.UseStaticFiles("resources");
+
+            //app.UseDirectoryBrowser();
+
             //app.UseHttpsRedirection();
 
             // 启用Swagger中间件
