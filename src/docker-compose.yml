@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  loggetter:
+    image: ${DOCKER_REGISTRY-}loggetter
+    build:
+      context: .
+      dockerfile: LogGetter/Dockerfile
