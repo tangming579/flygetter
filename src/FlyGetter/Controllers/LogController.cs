@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
-namespace LogGetter.Controllers
+namespace FlyGetter.Controllers
 {
     [EnableCors("AllowSpecificOrigin")]
     [ApiController]
@@ -58,8 +58,8 @@ namespace LogGetter.Controllers
             return obj + "";
         }
 
-        [HttpGet("filename/{filename}")]
-        [HttpPost("filename/{filename}")]
+        [HttpGet("{filename}")]
+        [HttpPost("{filename}")]
         public string GetLogByFileName(string fileName)
         {
             var obj = new JObject();

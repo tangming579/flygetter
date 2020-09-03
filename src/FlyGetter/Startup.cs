@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace LogGetter
+namespace FlyGetter
 {
     public class Startup
     {
@@ -68,7 +68,7 @@ namespace LogGetter
             }
             loggerFactory.AddLog4Net();
 
-            app.UseStaticFiles("resources");
+            app.UseStaticFiles("/resources");
 
             //app.UseDirectoryBrowser();
 
