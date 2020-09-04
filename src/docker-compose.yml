@@ -6,3 +6,10 @@ services:
     build:
       context: .
       dockerfile: FlyGetter/Dockerfile
+  database:
+        image: mysql:5.7
+        environment:
+          - "MYSQL_ROOT_PASSWORD=root"
+          - "MYSQL_DATABASE=larabbs"
+          - "MYSQL_USER=homestead"
+          - "MYSQL_PASSWORD=secret"

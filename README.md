@@ -97,3 +97,17 @@ docker rm $(docker ps -aq)     删除所有容器
 docker rmi $(docker images -q)   删除所有镜像
 ```
 
+5. Docker Compose
+
+最新版本：https://github.com/docker/compose/releases
+
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+修改目录可执行权限：
+
+```shell
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
