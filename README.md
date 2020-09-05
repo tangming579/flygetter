@@ -1,8 +1,15 @@
-# Docker 部署.Net Core
+# Docker 部署.Net Core+MySQL
 
-官方文档：https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-3.0
+.Net Core 3.1在CentOS+Docker下的部署
 
-1. 安装社区办docker：
+**项目说明**
+
+- 采用.Net Core 3.1开发，集成了SqlSugar、Newtonsoft.Json、EPPlus、ZXing、AutoFac等，实现的Restful API快速开发框架。
+- CentOS 7+ Docker-CE + Docker Compose + MySQL
+
+**步骤**
+
+1. 安装社区版docker：
 
 ```shell
 yum install docker-ce
@@ -38,15 +45,21 @@ $ systemctl restart docker.service
 新建.Net Core 项目，添加Docker支持：
 
 ```dockerfile
+#CentOS使用下面的系统镜像
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+##Ubuntu使用下面的系统镜像
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic AS base
 WORKDIR /app
 COPY . .
-ENV LANG zh_CN.UTF-8
-ENV LANGUAGE $LANG
-ENV LC_ALL $LANG
+
+#设置时区
 ENV TZ=Asia/Shanghai
-ENTRYPOINT ["dotnet", "LogGetter.dll"]
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#中文字符支持
+RUN apt-get clean && apt-get -y update && apt-get install -y locales && locale-gen zh_CN.UTF-8
+ENV LANG='zh_CN.UTF-8' LANGUAGE='zh_CN.UTF-8' LC_ALL='zh_CN.UTF-8'
+#执行命令
+ENTRYPOINT ["dotnet", "FlyGetter.dll"]
 ```
 
   dockerfile文件指令说明：
