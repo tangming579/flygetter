@@ -2,14 +2,14 @@
 
 .Net Core 3.1在CentOS+Docker下的部署
 
-**项目说明**
+### 项目说明
 
-- 采用.Net Core 3.1开发，集成了SqlSugar、Newtonsoft.Json、EPPlus、ZXing、AutoFac等，实现的Restful API快速开发框架。
-- CentOS 7+ Docker-CE + Docker Compose + MySQL
+- 采用.Net Core 3.1开发，集成了Swagger、Polly、AutoFac等
+- 部署环境：CentOS 7+ Docker-CE + Docker Compose、Nginx
 
-**步骤**
+### 安装步骤
 
-1. 安装社区版docker：
+#### 安装docker
 
 ```shell
 yum install docker-ce
@@ -17,11 +17,6 @@ sudo docker run hello-world
 
 sudo mkdir -p /etc/docker
 sudo vi /etc/docker/daemon.json
-
-sudo systemctl daemon-reload
-systemctl restart docker
-systemctl start docker.service
-systemctl enable docker.service
 ```
 
 更换为国内镜像源：
@@ -37,10 +32,29 @@ systemctl enable docker.service
   ]
 }
 # 重启docker服务使配置生效
-$ systemctl restart docker.service
+sudo systemctl daemon-reload
+systemctl restart docker
+systemctl start docker.service
+systemctl enable docker.service
 ```
 
-2. 创建.Net Core 项目
+#### 安装docker compose
+
+最新版本：https://github.com/docker/compose/releases
+
+```shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+修改目录可执行权限：
+
+```shell
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+
+
+#### 创建.Net Core 项目
 
 新建.Net Core 项目，添加Docker支持：
 
@@ -72,7 +86,7 @@ ENTRYPOINT ["dotnet", "FlyGetter.dll"]
 
 发布项目，拷贝publish文件夹至CentOS，目录：app/publish
 
-3. 部署项目
+#### 部署项目
 
 ```shell
 cd /app/publish
@@ -108,19 +122,5 @@ docker rm demotest     删除demotest容器
 docker rmi demotest    删除demotest镜像
 docker rm $(docker ps -aq)     删除所有容器
 docker rmi $(docker images -q)   删除所有镜像
-```
-
-5. Docker Compose
-
-最新版本：https://github.com/docker/compose/releases
-
-```shell
-sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-```
-
-修改目录可执行权限：
-
-```shell
-sudo chmod +x /usr/local/bin/docker-compose
 ```
 
