@@ -90,8 +90,14 @@ ENTRYPOINT ["dotnet", "FlyGetter.dll"]
 
 ```shell
 cd /app/publish
+
+#单容器部署：
 docker build -t mysystem .
 docker run --name myapi  -d -p 19121:19121 --restart=always -v /home/logs:/logs mysystem
+
+#docker compose 部署
+# 执行镜像构建，启动
+docker-compose up -d
 ```
 
 
@@ -106,6 +112,11 @@ docker exec -it containerID /bin/bash
 #docker安装vim：
 apt-get update
 apt-get install vim
+
+# 查看所有正在运行的容器
+docker-compose ps
+# 显示容器运行日志
+docker-compose logs
 ```
 
 4. 常用命令：

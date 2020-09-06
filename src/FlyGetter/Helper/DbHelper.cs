@@ -23,16 +23,19 @@ namespace FlyGetter.Helper
             }
         }
 
-        public static List<string> Test()
+        public static bool Test(out List<string> dataList, out string msg)
         {
+            dataList = new List<string>();
+            msg = string.Empty;
             try
             {
-                var info = db.DbMaintenance.GetDataBaseList(db);
-                return info;
+                dataList = db.DbMaintenance.GetDataBaseList(db);
+                return true;
             }
             catch (Exception exp)
             {
-                return null;
+                msg = exp.Message;
+                return false;
             }
         }
     }

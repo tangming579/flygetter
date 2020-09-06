@@ -6,11 +6,11 @@ services:
     restart: always
     build:
       context: .      
-      dockerfile: FlyGetter/Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - '19121:19121'  #×Ô¶¨Òå¶Ë¿Ú
+      - '19121:19121'  #è‡ªå®šä¹‰ç«¯å£
     depends_on:
-      - 'docker.mysql'  #±íÊ¾ÒÀÀµdocker.mysqlÕâ¸ö¾µÏñ£¬»áÔÚÕâ¸ö¾µÏñ¹¹½¨³É¹¦Ö®ºó²ÅÖ´ĞĞ
+      - 'docker.mysql'  #è¡¨ç¤ºä¾èµ–docker.mysqlè¿™ä¸ªé•œåƒï¼Œä¼šåœ¨è¿™ä¸ªé•œåƒæ„å»ºæˆåŠŸä¹‹åæ‰æ‰§è¡Œ
     networks:
       - net-core
   docker.mysql:
