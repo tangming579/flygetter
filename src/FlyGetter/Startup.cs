@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -68,9 +69,9 @@ namespace FlyGetter
             }
             loggerFactory.AddLog4Net();
 
-            app.UseStaticFiles("/resources");
+            app.UseStaticFiles();
 
-            //app.UseDirectoryBrowser();
+            app.UseDirectoryBrowser();
 
             //app.UseHttpsRedirection();
 

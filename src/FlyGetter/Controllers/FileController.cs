@@ -30,7 +30,7 @@ namespace FlyGetter.Controllers
         {
             _logger.LogInformation("Export file");
 
-            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwwroot\\exportfiles\\");
+            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot\\exportfiles\\");
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             string FileName = Path.Combine(filePath, $"{DateTime.Now:yyyyMMddHHmmssffff}.xlsx");
