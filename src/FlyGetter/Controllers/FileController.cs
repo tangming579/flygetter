@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 
 namespace FlyGetter.Controllers
@@ -31,32 +32,43 @@ namespace FlyGetter.Controllers
         public string ExportFile(string json)
         {
             _logger.LogInformation("Export file");
+            var obj = JObject.Parse(json);
+            var ret = new JObject();
 
             string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot\\exportfiles\\");
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
-            string FileName = Path.Combine(filePath, $"{DateTime.Now:yyyyMMddHHmmssffff}.txt");
+            string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}.txt";
+            string fileFullName = Path.Combine(filePath, fileName);
             var sb = new StringBuilder();
+            var columns = obj["columns"] as JArray;
+            var datas = obj["datas"] as JArray;
             try
             {
-                sb.Append("Name").Append('\t').Append("Age").Append('\t').Append("Value").Append('\t');
+                foreach (var column in columns)
+                {
+                    sb.Append(column).Append('\t');
+                }
                 sb.AppendLine();
                 sb.AppendLine("--------------------------------------------------------");
 
-                sb.Append("Tom").Append('\t').Append("12").Append('\t').Append("100").Append('\t');
-                sb.AppendLine();
-
-
-                sb.Append("Nick").Append('\t').Append("2333").Append('\t').Append("1111").Append('\t');
-                sb.AppendLine();
-
-                System.IO.File.WriteAllText(FileName, sb.ToString());
+                foreach (var data in datas)
+                {
+                    sb.Append(data["name"]).Append('\t').Append(data["time"]).Append('\t').Append(data["description"]).Append('\t');
+                    sb.AppendLine();
+                }
+                System.IO.File.WriteAllText(fileFullName, sb.ToString(),Encoding.UTF8);
             }
             catch (InvalidOperationException ex)
             {
                 _logger.LogError("Export Error", ex);
             }
-            return FileName;
+            var retData = new JObject();
+            retData["url"] = $"/exportfiles/{fileName}";
+            retData["localpath"] = fileFullName;
+            ret["data"] = retData;
+            ret["success"] = true;
+            return ret + "";
         }
 
         [HttpGet("excel")]
@@ -64,12 +76,14 @@ namespace FlyGetter.Controllers
         public string ExportExcelFile()
         {
             _logger.LogInformation("Export file");
+            var obj = new JObject();
 
             string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot\\exportfiles\\");
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
-            string FileName = Path.Combine(filePath, $"{DateTime.Now:yyyyMMddHHmmssffff}.xlsx");
-            FileInfo file = new FileInfo(FileName);
+            string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}.xlsx";
+            string fileFullName = Path.Combine(filePath, fileName);
+            FileInfo file = new FileInfo(fileFullName);
             try
             {
                 using (ExcelPackage ep = new ExcelPackage(file))
@@ -102,7 +116,13 @@ namespace FlyGetter.Controllers
             {
                 _logger.LogError("Export Error", ex);
             }
-            return FileName;
+
+            var data = new JObject();
+            data["url"] = $"/exportfiles/{fileName}";
+            data["localpath"] = fileFullName;
+            obj["data"] = data;
+            obj["success"] = true;
+            return obj + "";
         }
     }
 }
