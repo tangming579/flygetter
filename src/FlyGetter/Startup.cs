@@ -69,6 +69,7 @@ namespace FlyGetter
             }
             loggerFactory.AddLog4Net();
 
+
             app.UseStaticFiles();
 
             app.UseDirectoryBrowser();
