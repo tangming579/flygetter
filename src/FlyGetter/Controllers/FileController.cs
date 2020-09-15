@@ -35,7 +35,7 @@ namespace FlyGetter.Controllers
             var obj = JObject.Parse(json);
             var ret = new JObject();
 
-            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot\\exportfiles\\");
+            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot/exportfiles/");
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}.txt";
@@ -78,7 +78,7 @@ namespace FlyGetter.Controllers
             _logger.LogInformation("Export file");
             var obj = new JObject();
 
-            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot\\exportfiles\\");
+            string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot/exportfiles/");
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}.xlsx";
