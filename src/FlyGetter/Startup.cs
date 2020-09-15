@@ -54,7 +54,8 @@ namespace FlyGetter
                 //var xmlFile = System.AppDomain.CurrentDomain.FriendlyName + ".xml";
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(baseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
+                if (File.Exists(xmlPath))
+                    options.IncludeXmlComments(xmlPath);
 
             });
             services.AddControllers();
@@ -68,7 +69,6 @@ namespace FlyGetter
                 app.UseDeveloperExceptionPage();
             }
             loggerFactory.AddLog4Net();
-
 
             app.UseStaticFiles();
 
