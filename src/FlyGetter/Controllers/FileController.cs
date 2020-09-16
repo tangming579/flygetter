@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using FlyGetter.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,8 +28,8 @@ namespace FlyGetter.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{json}")]
-        [HttpPost("{json}")]
+        [HttpGet("/txt/{json}")]
+        [HttpPost("/txt/{json}")]
         public string ExportFile(string json)
         {
             _logger.LogInformation("Export file");
@@ -71,9 +72,9 @@ namespace FlyGetter.Controllers
             return ret + "";
         }
 
-        [HttpGet("excel")]
-        [HttpPost("excel")]
-        public string ExportExcelFile()
+        [HttpGet("excel/{json}")]
+        [HttpPost("excel/{json}")]
+        public string ExportExcelFile(FileExport fileExport)
         {
             _logger.LogInformation("Export file");
             var obj = new JObject();
@@ -89,26 +90,16 @@ namespace FlyGetter.Controllers
                 using (ExcelPackage ep = new ExcelPackage(file))
                 {
                     ExcelWorksheet worksheet = ep.Workbook.Worksheets.Add("log");
-                    worksheet.Cells[1, 1].Value = "名称";
-                    worksheet.Cells[1, 2].Value = "价格";
-                    worksheet.Cells[1, 3].Value = "销量";
 
-                    worksheet.Cells[2, 1].Value = "大米";
-                    worksheet.Cells[2, 2].Value = 56;
-                    worksheet.Cells[2, 3].Value = 100;
+                    for (int i = 1; i <= fileExport.datas.Count; i++)
+                    {
+                        worksheet.Cells[1, i].Value = fileExport.datas[i - 1].name;
 
-                    worksheet.Cells[3, 1].Value = "玉米";
-                    worksheet.Cells[3, 2].Value = 45;
-                    worksheet.Cells[3, 3].Value = 150;
-
-                    worksheet.Cells[4, 1].Value = "小米";
-                    worksheet.Cells[4, 2].Value = 38;
-                    worksheet.Cells[4, 3].Value = 130;
-
-                    worksheet.Cells[5, 1].Value = "糯米";
-                    worksheet.Cells[5, 2].Value = 22;
-                    worksheet.Cells[5, 3].Value = 200;
-
+                        for (int j = 1; j <= fileExport.datas[i - 1].items.Count; j++)
+                        {
+                            worksheet.Cells[i, j].Value = fileExport.datas[i - 1].items[j - 1];
+                        }
+                    }
                     ep.Save();
                 }
             }
