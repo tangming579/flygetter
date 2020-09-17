@@ -82,8 +82,7 @@ namespace FlyGetter
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Demo v1");
-
-                c.RoutePrefix = string.Empty;
+                //c.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();

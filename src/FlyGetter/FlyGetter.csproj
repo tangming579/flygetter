@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
     <DocumentationFile>D:\Work\Project\flygetter\src\FlyGetter\FlyGetter.xml</DocumentationFile>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <OutputPath>bin\Release\netcoreapp3.1\publish\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

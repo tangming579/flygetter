@@ -28,8 +28,8 @@ namespace FlyGetter.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("/txt/{json}")]
-        [HttpPost("/txt/{json}")]
+        [HttpGet("{json}")]
+        [HttpPost("{json}")]
         public string ExportFile(string json)
         {
             _logger.LogInformation("Export file");
@@ -72,11 +72,12 @@ namespace FlyGetter.Controllers
             return ret + "";
         }
 
-        [HttpGet("excel/{json}")]
-        [HttpPost("excel/{json}")]
-        public string ExportExcelFile(FileExport fileExport)
+        [HttpPost("excel")]
+        public string ExportExcelFile([FromBody]FileExport fileExport)
         {
             _logger.LogInformation("Export file");
+
+
             var obj = new JObject();
 
             string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot/exportfiles/");
