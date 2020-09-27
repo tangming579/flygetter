@@ -7,12 +7,15 @@ namespace FlyGetter.Model
 {
     public class FileExport
     {
-       public List<FileData> datas { get; set; }
+        public List<string> lable { get; set; }
+        public List<FileData> data { get; set; }
     }
 
     public class FileData
     {
-        public string name { get; set; }
-        public List<string> items { get; set; }
+        public string clock { get; set; }
+        public string errorObject { get; set; }
+        public string desc { get; set; }
+        public string severity { get; set; }
     }
 }

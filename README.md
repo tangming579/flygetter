@@ -133,5 +133,9 @@ docker rm demotest     删除demotest容器
 docker rmi demotest    删除demotest镜像
 docker rm $(docker ps -aq)     删除所有容器
 docker rmi $(docker images -q)   删除所有镜像
+docker cp /www/runoob 96f7f14e99ab:/www/  将主机/www/runoob目录拷贝到容器的/www目录下
+docker commit f3aff5ca8aa3 mynetweb   将容器f3aff5ca8aa3生成镜像mynetweb
+docker save -o nginx.tar nginx:latest  nginx.tar为目标文件，nginx:latest是源镜像名
+docker load -i nginx.tar
 ```
 

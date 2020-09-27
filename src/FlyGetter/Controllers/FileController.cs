@@ -28,12 +28,10 @@ namespace FlyGetter.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("{json}")]
-        [HttpPost("{json}")]
-        public string ExportFile(string json)
+        [HttpPost("txt")]
+        public string ExportFile([FromBody] FileExport fileExport)
         {
             _logger.LogInformation("Export file");
-            var obj = JObject.Parse(json);
             var ret = new JObject();
 
             string filePath = Path.Combine(Environment.CurrentDirectory, $"wwwroot/exportfiles/");
@@ -42,23 +40,21 @@ namespace FlyGetter.Controllers
             string fileName = $"{DateTime.Now:yyyyMMddHHmmssffff}.txt";
             string fileFullName = Path.Combine(filePath, fileName);
             var sb = new StringBuilder();
-            var columns = obj["columns"] as JArray;
-            var datas = obj["datas"] as JArray;
             try
             {
-                foreach (var column in columns)
+                foreach (var column in fileExport.lable)
                 {
                     sb.Append(column).Append('\t');
                 }
                 sb.AppendLine();
-                sb.AppendLine("--------------------------------------------------------");
+                sb.AppendLine("---------------------------------------------");
 
-                foreach (var data in datas)
+                foreach (var data in fileExport.data)
                 {
-                    sb.Append(data["name"]).Append('\t').Append(data["time"]).Append('\t').Append(data["description"]).Append('\t');
+                    sb.Append(data.clock).Append('\t').Append(data.errorObject).Append('\t').Append(data.desc).Append('\t').Append(data.severity).Append('\t');
                     sb.AppendLine();
                 }
-                System.IO.File.WriteAllText(fileFullName, sb.ToString(),Encoding.UTF8);
+                System.IO.File.WriteAllText(fileFullName, sb.ToString(), Encoding.UTF8);
             }
             catch (InvalidOperationException ex)
             {
@@ -73,7 +69,7 @@ namespace FlyGetter.Controllers
         }
 
         [HttpPost("excel")]
-        public string ExportExcelFile([FromBody]FileExport fileExport)
+        public string ExportExcelFile([FromBody] FileExport fileExport)
         {
             _logger.LogInformation("Export file");
 
@@ -90,16 +86,19 @@ namespace FlyGetter.Controllers
             {
                 using (ExcelPackage ep = new ExcelPackage(file))
                 {
-                    ExcelWorksheet worksheet = ep.Workbook.Worksheets.Add("log");
+                    ExcelWorksheet worksheet = ep.Workbook.Worksheets.Add("export");
 
-                    for (int i = 1; i <= fileExport.datas.Count; i++)
+                    for (int i = 1; i <= fileExport.lable.Count; i++)
                     {
-                        worksheet.Cells[1, i].Value = fileExport.datas[i - 1].name;
+                        worksheet.Cells[1, i].Value = fileExport.lable[i - 1];
+                    }
 
-                        for (int j = 1; j <= fileExport.datas[i - 1].items.Count; j++)
-                        {
-                            worksheet.Cells[i, j].Value = fileExport.datas[i - 1].items[j - 1];
-                        }
+                    for (int i = 1; i <= fileExport.data.Count; i++)
+                    {
+                        worksheet.Cells[i + 1, 1].Value = fileExport.data[i - 1].clock;
+                        worksheet.Cells[i + 1, 2].Value = fileExport.data[i - 1].errorObject;
+                        worksheet.Cells[i + 1, 3].Value = fileExport.data[i - 1].desc;
+                        worksheet.Cells[i + 1, 4].Value = fileExport.data[i - 1].severity;
                     }
                     ep.Save();
                 }
