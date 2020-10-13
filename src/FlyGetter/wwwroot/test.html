@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="/jquery/jquery.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+        $("button").click(function () {
+
+            var settings = {
+                "url": "http://localhost:19121/api/File/excel",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({ "lable": ["时间", "故障项", "描述", "严重性"], "data": [{ "clock": "2020-9-25 11:38:26", "errorObject": "FlexOne_NIS", "desc": "Unavailable by ICMP ping", "severity": "故障" }] }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                alert(response);
+            });
+
+        });
+    });
+</script>
+</head>
+<body>
+
+<button>Post</button>
+
+</body>
+</html>
