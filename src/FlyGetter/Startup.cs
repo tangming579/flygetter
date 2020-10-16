@@ -50,9 +50,9 @@ namespace FlyGetter
                     Description = "基于.NET Core 3.1 的Api Swagger"
                 });
                 // 加载程序集的xml描述文档
-                var baseDirectory = Environment.CurrentDirectory;
+                var baseDirectory = AppContext.BaseDirectory;
                 //var xmlFile = System.AppDomain.CurrentDomain.FriendlyName + ".xml";
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(baseDirectory, xmlFile);
                 if (File.Exists(xmlPath))
                     options.IncludeXmlComments(xmlPath);
