@@ -51,7 +51,6 @@ namespace FlyGetter
                 });
                 // 加载程序集的xml描述文档
                 var baseDirectory = AppContext.BaseDirectory;
-                //var xmlFile = System.AppDomain.CurrentDomain.FriendlyName + ".xml";
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(baseDirectory, xmlFile);
                 if (File.Exists(xmlPath))
@@ -74,7 +73,7 @@ namespace FlyGetter
 
             app.UseDirectoryBrowser();
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             // 启用Swagger中间件
             app.UseSwagger();
