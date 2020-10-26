@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FlyGetter.Model;
@@ -21,11 +22,13 @@ namespace FlyGetter.Controllers
     {
         private readonly ILogger<LogController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public FileController(ILogger<LogController> logger, IConfiguration configuration)
+        public FileController(ILogger<LogController> logger, IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _logger = logger;
             _configuration = configuration;
+            _httpClientFactory = httpClient;
         }
 
         [HttpPost("txt")]
