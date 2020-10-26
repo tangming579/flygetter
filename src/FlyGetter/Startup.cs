@@ -57,6 +57,13 @@ namespace FlyGetter
                     options.IncludeXmlComments(xmlPath);
 
             });
+            services.AddHttpClient("zabbix", c =>
+            {
+                c.BaseAddress = new Uri("http://192.168.128.200");
+                c.DefaultRequestHeaders.Add("Cookie", "zbx_sessionid=5e674026fefcc01010e902216dfefc94");
+                //c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+                //c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            });
             services.AddControllers();
         }
 
