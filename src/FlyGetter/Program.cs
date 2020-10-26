@@ -20,10 +20,17 @@ namespace FlyGetter
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                    .UseKestrel(options =>
+                    {
+                        options.ConfigureHttpsDefaults(config =>
+                        {
+                            config.ServerCertificate = new System.Security.Cryptography.X509Certificates.X509Certificate2("./server.pfx", "linezero");
+                        });
+                    })
+                    .UseStartup<Startup>();
                 });
     }
 }
