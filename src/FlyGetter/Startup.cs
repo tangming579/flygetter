@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using FlyGetter.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -64,7 +65,11 @@ namespace FlyGetter
                 //c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
                 //c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
             });
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(option =>
+            {
+                option.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                option.JsonSerializerOptions.Converters.Add(new DateTimeNullableConverter());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

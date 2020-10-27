@@ -1,6 +1,6 @@
 # Docker 部署.Net Core+MySQL
 
-.Net Core 3.1在CentOS+Docker下的部署
+.Net Core 3.1 下的后端Demo
 
 ### 项目说明
 
