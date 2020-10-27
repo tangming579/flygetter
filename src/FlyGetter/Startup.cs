@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using FlyGetter.Utils;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Polly;
 
 namespace FlyGetter
 {
@@ -64,7 +66,12 @@ namespace FlyGetter
                 c.DefaultRequestHeaders.Add("Cookie", "zbx_sessionid=5e674026fefcc01010e902216dfefc94");
                 //c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
                 //c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-            });
+            }).AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10)
+             })); ;
             services.AddControllers().AddJsonOptions(option =>
             {
                 option.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
