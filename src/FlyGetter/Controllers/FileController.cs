@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using FlyGetter.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -117,6 +119,33 @@ namespace FlyGetter.Controllers
             obj["data"] = data;
             obj["success"] = true;
             return obj + "";
+        }
+        [HttpGet("problem")]
+        public async Task<ResultModel<ProblemModel>> Problem(DateTime startTime, DateTime endTime, string zbx_sessionid)
+        {
+            var result = new ResultModel<ProblemModel>();
+
+            var client = _httpClientFactory.CreateClient("zabbix");
+            client.DefaultRequestHeaders.Add("Cookie", $"zbx_sessionid={zbx_sessionid}");
+
+            var formData = new MultipartFormDataContent();
+            formData.Add(new StringContent("web.problem.filter"), "idx");
+            formData.Add(new StringContent("0"), "idx2");
+            formData.Add(new StringContent($"{startTime:yyyy-MM-dd HH:mm:ss}"), "from");
+            formData.Add(new StringContent($"{endTime:yyyy-MM-dd HH:mm:ss}"), "to");
+            var resultTimeSet = await client.PostAsync("/zabbix.php?action=timeselector.update&type=11&method=rangechange", formData);
+
+            //var str = await resultTimeSet.Content.ReadAsStringAsync();
+
+            var resultProblem = await client.GetStreamAsync("/zabbix.php?action=problem.view.csv");
+
+            catch (Exception ex)
+            {
+                _logger.LogError("Export Error", ex);
+                result.data = null;
+                result.msg = ex.Message;
+            }
+            return result;
         }
     }
 }
