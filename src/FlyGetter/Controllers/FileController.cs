@@ -139,6 +139,20 @@ namespace FlyGetter.Controllers
 
             var resultProblem = await client.GetStreamAsync("/zabbix.php?action=problem.view.csv");
 
+            try
+            {
+                using (var reader = new StreamReader(resultProblem))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var records = csv.GetRecords<ProblemData>()
+                        .Where(x => x.Time >= startTime && x.Time <= endTime)
+                        .OrderByDescending(x => x.Time)
+                        .ToList();
+
+                    result.data = new ProblemModel { items = records };
+                    result.success = true;
+                }
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Export Error", ex);
